@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>امین استور</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;font-weight:800;font-family:'Vazirmatn',Tahoma,sans-serif}
+html,body{margin:0;min-height:100%}
+body{
+  color:#fff;min-height:100vh;
+  background:
+    radial-gradient(circle at 50% 18%,#39ff7a 0%,#12c34d 38%,#07772d 72%,#03451a 100%) fixed;
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 2px,transparent 2px 14px);}
+[hidden]{display:none!important}
+button,input,textarea,select{font:inherit;font-weight:800}
+.card{background:rgba(0,40,15,.55);border:2px solid rgba(255,255,255,.25);border-radius:20px;padding:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.25);backdrop-filter:blur(6px)}
+label{display:block;margin:12px 0 6px}
+input,textarea,select{width:100%;padding:13px 14px;border-radius:14px;border:2px solid rgba(255,255,255,.35);
+  background:rgba(0,0,0,.35);color:#fff;outline:none;font-size:16px}
+input:focus,textarea:focus,select:focus{border-color:#ffe14d;box-shadow:0 0 0 3px rgba(255,225,77,.3)}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.55)}
+.btn{display:block;width:100%;margin-top:18px;padding:14px;border:0;border-radius:16px;cursor:pointer;font-size:18px;color:#1b0d00;
+  background:linear-gradient(180deg,#fff27a,#ff9d00);box-shadow:0 6px 0 #a35200,0 12px 20px rgba(0,0,0,.4)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #a35200}
+.btn.sm{display:inline-block;width:auto;margin:0;padding:7px 12px;font-size:13px;box-shadow:0 3px 0 #a35200;border-radius:12px}
+.btn.red{background:linear-gradient(180deg,#ff8a7a,#e0200a);color:#fff;box-shadow:0 3px 0 #7a0e00}
+h2{margin:0 0 6px;font-size:24px;text-shadow:0 3px 0 rgba(0,0,0,.35)}
+h3{margin:22px 0 10px;font-size:19px;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.wrap{max-width:640px;margin:0 auto;padding:70px 14px 40px}
+.err{color:#ffd1c9;background:rgba(200,30,10,.45);border-radius:12px;padding:8px 12px;margin-top:12px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:14px;
+  z-index:99;border:2px solid #ffe14d;max-width:90%;text-align:center}
+.demo{background:#ffe14d;color:#3a2a00;padding:6px 10px;text-align:center;font-size:12px;position:relative;z-index:5}
+
+/* ===== lava title ===== */
+.hero{position:relative;text-align:center;padding:30px 0 10px;overflow:visible}
+.lava-wrap{position:relative;display:inline-block;line-height:1.15;font-size:clamp(64px,22vw,150px);font-weight:900;direction:rtl}
+.lava-wrap::before{content:attr(data-text);position:absolute;inset:0;z-index:0;color:#3b0a00;font-weight:900;
+  text-shadow:1px 1px 0 #2a0600,2px 2px 0 #2a0600,3px 3px 0 #2a0600,4px 4px 0 #2a0600,5px 5px 0 #240500,6px 6px 0 #240500,
+  7px 7px 0 #1d0400,8px 8px 0 #1d0400,9px 9px 0 #150300,10px 10px 0 #150300,0 18px 22px rgba(0,0,0,.65)}
+.lava{position:relative;z-index:1;display:block;font-weight:900;color:transparent;
+  background:linear-gradient(0deg,#fffbc2 0%,#ffe14d 14%,#ffa200 34%,#ff4d00 58%,#c21a00 80%,#5c0a00 100%);
+  background-size:100% 260%;background-position:0 100%;
+  -webkit-background-clip:text;background-clip:text;
+  filter:drop-shadow(0 0 8px #ff7a00) drop-shadow(0 0 22px #ff3d00);
+  animation:rise 3.2s ease-in-out infinite alternate,flick 1.7s linear infinite}
+@keyframes rise{from{background-position:0 100%}to{background-position:0 18%}}
+@keyframes flick{0%,100%{filter:drop-shadow(0 0 8px #ff7a00) drop-shadow(0 0 22px #ff3d00)}
+  45%{filter:drop-shadow(0 0 14px #ffb300) drop-shadow(0 0 36px #ff4d00)}
+  70%{filter:drop-shadow(0 0 6px #ff6a00) drop-shadow(0 0 18px #e82d00)}}
+.bubble{position:absolute;bottom:8%;border-radius:50%;z-index:2;pointer-events:none;
+  background:radial-gradient(circle at 35% 30%,#fff7b0,#ffb300 55%,#ff4d00);box-shadow:0 0 10px #ff7a00;opacity:0;
+  animation:bub linear infinite}
+@keyframes bub{0%{transform:translateY(0) scale(.4);opacity:0}15%{opacity:.95}100%{transform:translateY(-120px) scale(1);opacity:0}}
+.sub{margin-top:6px;text-shadow:0 2px 0 rgba(0,0,0,.4);font-size:15px}
+
+/* ===== menu ===== */
+#dots{position:fixed;top:12px;left:12px;z-index:60;width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.6);
+  background:rgba(0,0,0,.5);color:#fff;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#menu{position:fixed;top:68px;left:12px;z-index:60;min-width:210px;background:rgba(2,35,13,.97);border:2px solid #ffe14d;
+  border-radius:18px;padding:8px;box-shadow:0 14px 30px rgba(0,0,0,.5)}
+#menu button{display:block;width:100%;text-align:right;background:none;border:0;color:#fff;padding:12px 14px;border-radius:12px;font-size:16px;cursor:pointer}
+#menu button:hover,#menu button.on{background:rgba(255,225,77,.22)}
+
+/* ===== lists ===== */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border-radius:999px;border:2px solid rgba(255,255,255,.5);background:rgba(0,0,0,.35);color:#fff;cursor:pointer}
+.chip.operator{border-color:#ff6a3d;background:rgba(255,80,30,.35)}
+.chip.admin{border-color:#ffe14d;background:rgba(255,225,77,.25)}
+.chip.sponsor{border-color:#7ad7ff;background:rgba(60,170,255,.28)}
+.empty{opacity:.75;font-size:14px}
+.ad{margin-top:12px}
+.ad img{width:100%;max-height:260px;object-fit:cover;border-radius:14px;margin:8px 0}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:14px}
+.kv div{background:rgba(0,0,0,.3);padding:6px 10px;border-radius:10px}
+.desc{white-space:pre-wrap;margin-top:8px;font-size:14px;max-height:160px;overflow:auto;background:rgba(0,0,0,.25);padding:8px;border-radius:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.mem{margin-top:10px}
+.roles{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.roles button{padding:6px 12px;border-radius:10px;border:2px solid rgba(255,255,255,.5);background:rgba(0,0,0,.35);color:#fff;cursor:pointer}
+.roles button.on{background:#ffe14d;color:#2a1a00;border-color:#fff}
+.tk{margin-top:10px;background:rgba(0,0,0,.3);padding:10px;border-radius:14px}
+
+/* ===== chat ===== */
+#msgs{height:52vh;overflow:auto;padding:8px;background:rgba(0,0,0,.3);border-radius:16px}
+.m{margin:8px 0;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.14);max-width:90%;word-break:break-word}
+.m.me{background:rgba(255,225,77,.28);margin-right:auto}
+.m small{opacity:.8;display:block;font-size:12px}
+.m .del{float:left;background:none;border:0;color:#ffb3a6;cursor:pointer}
+.chatbar{display:flex;gap:6px;margin-top:10px}
+.chatbar input{flex:1}
+.chatbar button{border:0;border-radius:14px;padding:0 16px;cursor:pointer;font-size:20px;background:linear-gradient(180deg,#fff27a,#ff9d00)}
+#emo{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:8px;background:rgba(0,0,0,.5);padding:8px;border-radius:14px;max-height:170px;overflow:auto}
+#emo span{font-size:24px;text-align:center;cursor:pointer;padding:3px;border-radius:8px}
+#emo span:hover{background:rgba(255,255,255,.2)}
+.upl{border:2px dashed rgba(255,255,255,.6);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:rgba(0,0,0,.25)}
+.upl img{max-width:100%;max-height:200px;border-radius:12px;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="demoBar" class="demo" hidden>حالت آزمایشی (بدون فایربیس) — اطلاعات فقط روی همین مرورگر ذخیره می‌شود. برای اتصال فایربیس بالای کد، <b>FIREBASE_CONFIG</b> را پر کنید.</div>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginView" class="wrap" style="padding-top:40px">
+  <div class="hero" style="padding-top:0">
+    <div class="lava-wrap" data-text="امین استور" style="font-size:clamp(48px,16vw,110px)"><span class="lava">امین استور</span></div>
+  </div>
+  <form id="loginForm" class="card" autocomplete="off">
+    <h2>ورود به سایت</h2>
+    <label>نام و نام خانوادگی</label>
+    <input id="l_name" placeholder="نام و نام خانوادگی" required>
+    <label>یوزر نیم خود را وارد کنید:</label>
+    <input id="l_user" placeholder="مثلا Raven" required dir="ltr" style="text-align:right">
+    <label>سن خود را وارد نمایید</label>
+    <input id="l_age" type="number" min="5" max="99" placeholder="سن" required>
+    <label>شماره خود را وارد نمایید</label>
+    <input id="l_phone" type="tel" placeholder="09xxxxxxxxx" required dir="ltr" style="text-align:right">
+    <label>آیدی تلگرام خود را وارد نمایید</label>
+    <input id="l_tg" placeholder="@username" required dir="ltr" style="text-align:right">
+    <div id="l_err" class="err" hidden></div>
+    <button class="btn" type="submit">تایید</button>
+  </form>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app" hidden>
+  <button id="dots" aria-label="menu">⋮</button>
+  <div id="menu" hidden></div>
+
+  <!-- HOME -->
+  <section id="p_home" class="wrap">
+    <div class="hero" id="hero">
+      <div class="lava-wrap" data-text="امین استور"><span class="lava">امین استور</span></div>
+      <div class="sub">فروش و خرید اکانت — مطمئن و سریع</div>
+    </div>
+    <h3>👑 اوپراتورها</h3><div class="chips" id="L_operator"></div>
+    <h3>🛡️ ادمین‌ها</h3><div class="chips" id="L_admin"></div>
+    <h3>⭐ اسپانسرها</h3><div class="chips" id="L_sponsor"></div>
+    <h3>🛒 آگهی‌های اکانت</h3><div id="adList"></div>
+  </section>
+
+  <!-- SELL -->
+  <section id="p_sell" class="wrap" hidden>
+    <form id="sellForm" class="card">
+      <h2>آگهی اکانت (فروش اکانت)</h2>
+      <label>یو آیدی اکانت</label><input id="s_uid" required dir="ltr" style="text-align:right">
+      <label>عکس اکانت را آپلود کنید</label>
+      <div class="upl" id="upl">📷 برای انتخاب عکس از گالری بزنید<br><img id="s_prev" hidden></div>
+      <input id="s_file" type="file" accept="image/*" hidden>
+      <label>کد اکانت</label><input id="s_code" required dir="ltr" style="text-align:right">
+      <label>لول اکانت</label><input id="s_level" required>
+      <label>تایر اکانت</label><input id="s_tier" required>
+      <label>تعداد سی پی</label><input id="s_cp" type="number" min="0" required>
+      <label>توضیحات کلی (تا ۵۰ خط) — <span id="s_cnt">0/50</span></label>
+      <textarea id="s_desc" rows="10"></textarea>
+      <div id="s_err" class="err" hidden></div>
+      <button class="btn" type="submit">ثبت آگهی</button>
+    </form>
+  </section>
+
+  <!-- TICKET -->
+  <section id="p_ticket" class="wrap" hidden>
+    <form id="tkForm" class="card">
+      <h2>تیکت پشتیبانی</h2>
+      <label>آیدی اکانت تلگرام خود را وارد نمایید :</label><input id="t_tg" required dir="ltr" style="text-align:right">
+      <label>کد اکانت (همان کدی که روی آگهی بود)</label><input id="t_code" required dir="ltr" style="text-align:right">
+      <label>توضیحات کلی</label><textarea id="t_desc" rows="6" required></textarea>
+      <button class="btn" type="submit">ارسال تیکت</button>
+    </form>
+    <div id="tkBox" hidden>
+      <h3>📨 تیکت‌های دریافتی (فقط اوپراتورها)</h3>
+      <div id="tkList"></div>
+    </div>
+  </section>
+
+  <!-- MEMBERS -->
+  <section id="p_members" class="wrap" hidden>
+    <h2>ممبرها</h2><div class="empty">فقط اوپراتورها این بخش را می‌بینند.</div>
+    <div id="memList"></div>
+  </section>
+
+  <!-- CHAT -->
+  <section id="p_chat" class="wrap" hidden>
+    <h2>چت جهانی</h2>
+    <div id="msgs"></div>
+    <div id="emo" hidden></div>
+    <form class="chatbar" id="chatForm">
+      <button type="button" id="emoBtn">😀</button>
+      <input id="c_in" placeholder="پیام بنویسید..." maxlength="500" autocomplete="off">
+      <button type="submit">➤</button>
+    </form>
+  </section>
+</div>
+<div id="toast" hidden></div>
+
+<script type="module">
+/* =====================================================================
+   تنظیمات فایربیس — مقادیر را از Firebase Console > Project settings بردارید.
+   اگر apiKey خالی باشد سایت در حالت آزمایشی (localStorage) اجرا می‌شود.
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAFwGNZ_UGE5w8mdg7AjkmvstaGi2H72BU",
+  authDomain: "aminstorac.firebaseapp.com",
+  projectId: "aminstorac",
+  storageBucket: "aminstorac.firebasestorage.app",
+  messagingSenderId: "392724101103",
+  appId: "1:392724101103:web:7ef41f445cc1e65be4281a"
+};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast = t => { const e=$('#toast'); e.textContent=t; e.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>e.hidden=true,2600); };
+
+/* ---------------- Data layer: local demo ---------------- */
+const LS = { get:k=>{try{return JSON.parse(localStorage.getItem('amin_'+k))||[]}catch(e){return[]}}, set:(k,v)=>localStorage.setItem('amin_'+k,JSON.stringify(v)) };
+const subs = {};
+const emit = k => (subs[k]||[]).forEach(f=>f(LS.get(k)));
+addEventListener('storage', e => { if(e.key && e.key.startsWith('amin_')) emit(e.key.slice(5)); });
+const local = {
+  async getUser(id){ return LS.get('users').find(u=>u.id===id)||null },
+  async saveUser(u){ const a=LS.get('users').filter(x=>x.id!==u.id); a.push(u); LS.set('users',a); emit('users'); },
+  async setRole(id,role){ LS.set('users',LS.get('users').map(u=>u.id===id?{...u,role}:u)); emit('users'); },
+  sub(k,cb){ (subs[k]=subs[k]||[]).push(cb); cb(LS.get(k)); return ()=>{}; },
+  async add(k,o){ const a=LS.get(k); a.push({...o,id:Date.now()+'_'+Math.random().toString(36).slice(2,7),ts:Date.now()}); LS.set(k,a); emit(k); },
+  async del(k,id){ LS.set(k,LS.get(k).filter(x=>x.id!==id)); emit(k); }
+};
+
+/* ---------------- Data layer: Firebase ---------------- */
+async function initFB(){
+  const V='10.12.2';
+  const { initializeApp } = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
+  const fs = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
+  const d = fs.getFirestore(initializeApp(FIREBASE_CONFIG));
+  return {
+    async getUser(id){ const s=await fs.getDoc(fs.doc(d,'users',id)); return s.exists()?{id,...s.data()}:null },
+    async saveUser(u){ const {id,...r}=u; await fs.setDoc(fs.doc(d,'users',id),r) },
+    async setRole(id,role){ await fs.updateDoc(fs.doc(d,'users',id),{role}) },
+    sub(k,cb){ return fs.onSnapshot(fs.collection(d,k), s=>cb(s.docs.map(x=>({id:x.id,...x.data()}))), e=>console.warn(k,e.message)); },
+    async add(k,o){ await fs.addDoc(fs.collection(d,k),{...o,ts:Date.now()}) },
+    async del(k,id){ await fs.deleteDoc(fs.doc(d,k,id)) }
+  };
+}
+
+/* ---------------- State ---------------- */
+let db, me=null;
+const data={users:[],ads:[],tickets:[],chat:[]};
+const ROLE_FA={operator:'اوپراتور',admin:'ادمین',sponsor:'اسپانسر',member:'عضو'};
+const PERMS={operator:['sell','ticket','chat','members','tickets','mod'],admin:['sell','ticket','chat','mod'],member:['sell','ticket','chat'],sponsor:[]};
+const can = p => me && (PERMS[me.role]||[]).includes(p);
+let ticketsSubbed=false;
+
+/* ---------------- Login ---------------- */
+$('#loginForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const err=$('#l_err'); err.hidden=true;
+  const name=$('#l_name').value.trim(), user=$('#l_user').value.trim().replace(/^@/,'');
+  const age=+$('#l_age').value, phone=$('#l_phone').value.trim().replace(/\s/g,'');
+  const tg=$('#l_tg').value.trim().replace(/^@/,'');
+  const bad=m=>{err.textContent=m;err.hidden=false};
+  if(name.length<3) return bad('نام و نام خانوادگی را کامل وارد کنید');
+  if(!/^[A-Za-z0-9_.]{3,24}$/.test(user)) return bad('یوزر نیم فقط انگلیسی/عدد/_ و حداقل ۳ حرف باشد');
+  if(!(age>=5&&age<=99)) return bad('سن معتبر نیست');
+  if(!/^\+?\d{10,14}$/.test(phone)) return bad('شماره معتبر نیست');
+  if(!/^[A-Za-z0-9_]{4,32}$/.test(tg)) return bad('آیدی تلگرام معتبر نیست');
+  const id=user.toLowerCase();
+  try{
+    const ex=await db.getUser(id);
+    if(ex){
+      if(ex.phone!==phone) return bad('این یوزر نیم قبلا ثبت شده و شماره با آن مطابقت ندارد');
+      await db.saveUser({...ex,name,age,tg});
+      me={...ex,name,age,tg};
+    }else{
+      me={id,username:user,name,age,phone,tg,role:id==='raven'?'operator':'member'};
+      await db.saveUser(me);
+    }
+    localStorage.setItem('amin_session',id);
+    enter();
+  }catch(ex2){ bad('خطا در ارتباط با سرور: '+ex2.message); }
+});
+
+function enter(){
+  $('#loginView').hidden=true; $('#app').hidden=false;
+  buildMenu(); go('home');
+  db.sub('users',a=>{ data.users=a; const m=a.find(u=>u.id===me.id); if(m){ me={...me,...m}; } buildMenu(); renderStaff(); renderMembers(); subTickets(); });
+  db.sub('ads',a=>{ data.ads=a.sort((x,y)=>y.ts-x.ts); renderAds(); });
+  db.sub('chat',a=>{ data.chat=a.sort((x,y)=>x.ts-y.ts).slice(-200); renderChat(); });
+  makeBubbles();
+}
+function subTickets(){
+  if(ticketsSubbed||!can('tickets')) return; ticketsSubbed=true;
+  db.sub('tickets',a=>{ data.tickets=a.sort((x,y)=>y.ts-x.ts); renderTickets(); });
+}
+
+/* ---------------- Menu / nav ---------------- */
+let page='home';
+function buildMenu(){
+  const items=[['home','🏠 صفحه اصلی',true],['sell','💰 فروش اکانت / آگهی اکانت',can('sell')],['ticket','🎫 تیکت پشتیبانی',can('ticket')],
+    ['members','👥 ممبرها',can('members')],['chat','🌍 چت جهانی',can('chat')]];
+  $('#menu').innerHTML=items.filter(i=>i[2]).map(i=>`<button data-p="${i[0]}" class="${page===i[0]?'on':''}">${i[1]}</button>`).join('')
+    +`<button data-p="_out">🚪 خروج</button>`;
+}
+$('#dots').onclick=e=>{ e.stopPropagation(); $('#menu').hidden=!$('#menu').hidden; };
+document.addEventListener('click',e=>{ if(!e.target.closest('#menu')) $('#menu').hidden=true; });
+$('#menu').onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.p==='_out'){ localStorage.removeItem('amin_session'); location.reload(); return; }
+  go(b.dataset.p); $('#menu').hidden=true;
+};
+function go(p){
+  page=p;
+  ['home','sell','ticket','members','chat'].forEach(x=>$('#p_'+x).hidden=(x!==p));
+  $('#tkBox').hidden=!can('tickets');
+  if(p==='ticket') $('#t_tg').value=$('#t_tg').value||('@'+me.tg);
+  if(p==='chat') setTimeout(()=>{$('#msgs').scrollTop=1e9},50);
+  buildMenu(); scrollTo(0,0);
+}
+
+/* ---------------- Home: staff + ads ---------------- */
+function renderStaff(){
+  ['operator','admin','sponsor'].forEach(r=>{
+    const l=data.users.filter(u=>u.role===r);
+    $('#L_'+r).innerHTML=l.length?l.map(u=>`<button class="chip ${r}" data-tg="${esc(u.tg)}">${esc(u.username)}</button>`).join(''):'<span class="empty">هنوز کسی نیست</span>';
+  });
+}
+$('#p_home').addEventListener('click',e=>{
+  const c=e.target.closest('.chip[data-tg]'); if(c) toast('آیدی تلگرام: @'+c.dataset.tg);
+  const d=e.target.closest('[data-delad]'); if(d && confirm('آگهی حذف شود؟')) db.del('ads',d.dataset.delad);
+});
+function renderAds(){
+  const el=$('#adList');
+  if(!data.ads.length){ el.innerHTML='<div class="empty">هنوز آگهی‌ای ثبت نشده.</div>'; return; }
+  el.innerHTML=data.ads.map(a=>`
+   <div class="card ad">
+     <div class="row"><b>فروشنده: ${esc(a.ownerName)}</b>
+       ${(can('mod')||a.owner===me.id)?`<button class="btn sm red" data-delad="${esc(a.id)}">حذف</button>`:''}</div>
+     ${a.img?`<img src="${a.img}" alt="">`:''}
+     <div class="kv"><div>UID: ${esc(a.uid)}</div><div>کد: ${esc(a.code)}</div><div>لول: ${esc(a.level)}</div>
+       <div>تایر: ${esc(a.tier)}</div><div>CP: ${esc(a.cp)}</div><div>تلگرام: @${esc(a.tg)}</div></div>
+     ${a.desc?`<div class="desc">${esc(a.desc)}</div>`:''}
+   </div>`).join('');
+}
+
+/* ---------------- Sell form ---------------- */
+let imgData='';
+$('#upl').onclick=()=>$('#s_file').click();
+$('#s_file').onchange=e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ const im=new Image(); im.onload=()=>{
+      const m=900, k=Math.min(1,m/Math.max(im.width,im.height)); const c=document.createElement('canvas');
+      c.width=im.width*k; c.height=im.height*k; c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      imgData=c.toDataURL('image/jpeg',.7); $('#s_prev').src=imgData; $('#s_prev').hidden=false; };
+    im.src=r.result; };
+  r.readAsDataURL(f);
+};
+$('#s_desc').addEventListener('input',e=>{
+  let l=e.target.value.split('\n'); if(l.length>50){ l=l.slice(0,50); e.target.value=l.join('\n'); }
+  $('#s_cnt').textContent=l.length+'/50';
+});
+$('#sellForm').addEventListener('submit',async e=>{
+  e.preventDefault(); const err=$('#s_err'); err.hidden=true;
+  if(!can('sell')) return;
+  if(!imgData){ err.textContent='عکس اکانت را آپلود کنید'; err.hidden=false; return; }
+  await db.add('ads',{owner:me.id,ownerName:me.username,tg:me.tg,uid:$('#s_uid').value.trim(),img:imgData,code:$('#s_code').value.trim(),
+    level:$('#s_level').value.trim(),tier:$('#s_tier').value.trim(),cp:$('#s_cp').value,desc:$('#s_desc').value});
+  e.target.reset(); imgData=''; $('#s_prev').hidden=true; $('#s_cnt').textContent='0/50';
+  toast('آگهی ثبت شد ✅'); go('home');
+});
+
+/* ---------------- Tickets ---------------- */
+$('#tkForm').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!can('ticket')) return;
+  await db.add('tickets',{from:me.id,fromName:me.username,tg:$('#t_tg').value.trim(),code:$('#t_code').value.trim(),desc:$('#t_desc').value.trim()});
+  $('#t_code').value=''; $('#t_desc').value=''; toast('تیکت ارسال شد ✅');
+});
+function renderTickets(){
+  if(!can('tickets')) return;
+  $('#tkBox').hidden=false;
+  $('#tkList').innerHTML=data.tickets.length?data.tickets.map(t=>`
+    <div class="tk"><div class="row"><b>از: ${esc(t.fromName)}</b>
+      <button class="btn sm red" data-deltk="${esc(t.id)}">حذف</button></div>
+      <div>تلگرام: ${esc(t.tg)}</div><div>کد اکانت: ${esc(t.code)}</div>
+      <div class="desc">${esc(t.desc)}</div></div>`).join(''):'<div class="empty">تیکتی نیست</div>';
+}
+$('#tkList').addEventListener('click',e=>{ const b=e.target.closest('[data-deltk]'); if(b) db.del('tickets',b.dataset.deltk); });
+
+/* ---------------- Members (operators only) ---------------- */
+function renderMembers(){
+  if(!can('members')){ $('#memList').innerHTML=''; return; }
+  $('#memList').innerHTML=data.users.map(u=>`
+    <div class="card mem"><div class="row"><b>${esc(u.username)}</b><span>${ROLE_FA[u.role]||'عضو'}</span></div>
+      <div style="font-size:13px;opacity:.85">${esc(u.name)} — سن ${esc(u.age)} — @${esc(u.tg)}</div>
+      <div class="roles">${['operator','admin','sponsor','member'].map(r=>
+        `<button data-uid="${esc(u.id)}" data-role="${r}" class="${u.role===r?'on':''}">${ROLE_FA[r]}</button>`).join('')}</div></div>`).join('');
+}
+$('#memList').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-role]'); if(!b||!can('members')) return;
+  if(b.dataset.uid==='raven'){ toast('نقش Raven قابل تغییر نیست'); return; }
+  await db.setRole(b.dataset.uid,b.dataset.role); toast('نقش تغییر کرد ✅');
+});
+
+/* ---------------- Global chat ---------------- */
+const EMOJIS='😀 😁 😂 🤣 😍 🥰 😎 🤩 🥳 😇 😈 🤑 🤯 😱 🥶 🔥 💥 ⚡ ✨ 🌟 💎 👑 🏆 🎮 🕹️ 🎯 💣 🔫 🪖 ⚔️ 🛡️ 💰 💸 🪙 🎁 🎉 ❤️ 🧡 💛 💚 💙 💜 🖤 🤍 💯 ✅ ❌ ⭐ 👍 👎 👏 🙏 💪 🤝 👀 🫡 🚀 🌋 🔥 🐉 🦅 🐺 🦁 😴 🤔 😡 😭 🥹'.split(' ');
+$('#emo').innerHTML=EMOJIS.map(x=>`<span>${x}</span>`).join('');
+$('#emoBtn').onclick=()=>$('#emo').hidden=!$('#emo').hidden;
+$('#emo').onclick=e=>{ if(e.target.tagName==='SPAN'){ $('#c_in').value+=e.target.textContent; $('#c_in').focus(); } };
+$('#chatForm').addEventListener('submit',async e=>{
+  e.preventDefault(); const t=$('#c_in').value.trim(); if(!t||!can('chat')) return;
+  $('#c_in').value=''; await db.add('chat',{uid:me.id,name:me.username,role:me.role,text:t});
+});
+function renderChat(){
+  const box=$('#msgs'); const near=box.scrollHeight-box.scrollTop-box.clientHeight<80;
+  box.innerHTML=data.chat.map(m=>`<div class="m ${m.uid===me.id?'me':''}">
+    ${can('mod')?`<button class="del" data-delm="${esc(m.id)}">🗑</button>`:''}
+    <small>${esc(m.name)}${m.role&&m.role!=='member'?' • '+(ROLE_FA[m.role]||''):''}</small>${esc(m.text)}</div>`).join('')||'<div class="empty">هنوز پیامی نیست؛ اولین نفر باش!</div>';
+  if(near) box.scrollTop=1e9;
+}
+$('#msgs').addEventListener('click',e=>{ const b=e.target.closest('[data-delm]'); if(b) db.del('chat',b.dataset.delm); });
+
+/* ---------------- Lava bubbles ---------------- */
+function makeBubbles(){
+  const h=$('#hero'); if(!h||h.querySelector('.bubble')) return;
+  for(let i=0;i<14;i++){
+    const b=document.createElement('i'); b.className='bubble';
+    const s=6+Math.random()*10; b.style.cssText=`width:${s}px;height:${s}px;left:${8+Math.random()*84}%;bottom:${10+Math.random()*25}%;animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*3}s`;
+    h.appendChild(b);
+  }
+}
+
+/* ---------------- Boot ---------------- */
+(async()=>{
+  try{
+    if(FIREBASE_CONFIG.apiKey){ db=await initFB(); } else { db=local; $('#demoBar').hidden=false; }
+    const sid=localStorage.getItem('amin_session');
+    if(sid){ const u=await db.getUser(sid); if(u){ me=u; enter(); } }
+  }catch(e){ console.error(e); toast('خطا در اتصال: '+e.message); db=local; $('#demoBar').hidden=false; }
+})();
+</script>
+</body>
+</html>
